@@ -1,2 +1,5 @@
 .env.prod.db
 .env.prod
+.env.dev
+/.vscode
+.gitignore
