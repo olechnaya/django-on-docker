@@ -18,20 +18,28 @@ services:
         start_period: 80s
 
   django:
-    #image: ollyko/skillfactory:django-on-docker_django
-    build:
-      context: ./app
-      dockerfile: Dockerfile
+    image: ollyko/skillfactory:django-on-docker_django
+    #build:
+    #  context: ./app
+    # dockerfile: Dockerfile
     container_name: django
     command: gunicorn hello_django.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - static_volume:/home/app/staticfiles
-      - media_volume:/home/app/mediafiles
+      - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/mediafiles
       - .:/home/app/
     expose:
     - 8000
-    env_file:
-      - .env
+    environment:
+      DJANGO_SUPERUSER_PASSWORD: "123321"
+      DJANGO_SUPERUSER_EMAIL: "admin@example.com"
+      DJANGO_SUPERUSER_USERNAME: "admin"
+      DB_ENGINE: "django.db.backends.postgresql"
+      DB_NAME: "hello_django"
+      POSTGRES_USER: "hello_django"
+      POSTGRES_PASSWORD: "hello_django"
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
     depends_on:
     - postgres
 
@@ -49,3 +57,4 @@ services:
 volumes:
   static_volume:
   media_volume:
+
